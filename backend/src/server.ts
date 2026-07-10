@@ -1,3 +1,13 @@
+import "dotenv/config";
+import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
+// Ensure config/.env is loaded in both dev and production builds.
+try {
+  const __dir = path.dirname(fileURLToPath(import.meta.url));
+  dotenv.config({ path: path.resolve(__dir, "../config/.env") });
+  dotenv.config({ path: path.resolve(__dir, "../../config/.env") });
+} catch {}
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
