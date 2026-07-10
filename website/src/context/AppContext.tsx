@@ -48,7 +48,8 @@ interface AppContextType {
   authModalOpen: boolean;
   authModalMode: "signin" | "signup";
   authModalInitialStep: "signin" | "signup" | "forgot";
-  openAuthModal: (mode?: "signin" | "signup") => void;
+  authModalPrefillEmail?: string;
+  openAuthModal: (mode?: "signin" | "signup", prefillEmail?: string) => void;
   openForgotPasswordModal: () => void;
   closeAuthModal: () => void;
   rememberChoice: boolean;
@@ -159,6 +160,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [authModalOpen, setAuthModalOpen] = useState<boolean>(false);
   const [authModalMode, setAuthModalMode] = useState<"signin" | "signup">("signin");
   const [authModalInitialStep, setAuthModalInitialStep] = useState<"signin" | "signup" | "forgot">("signin");
+  const [authModalPrefillEmail, setAuthModalPrefillEmail] = useState<string | undefined>(undefined);
   const [authLoading, setAuthLoading] = useState<boolean>(true);
   const [authError, setAuthError] = useState<string | null>(null);
   const [rememberChoice, setRememberChoice] = useState<boolean>(false);
@@ -660,9 +662,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setCurrentView("home");
   };
 
-  const openAuthModal = (mode: "signin" | "signup" = "signin") => {
+  const openAuthModal = (mode: "signin" | "signup" = "signin", prefillEmail?: string) => {
     setAuthModalMode(mode);
     setAuthModalInitialStep(mode === "signup" ? "signup" : "signin");
+    setAuthModalPrefillEmail(prefillEmail);
     setAuthModalOpen(true);
   };
 
@@ -672,7 +675,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setAuthModalOpen(true);
   };
 
-  const closeAuthModal = () => setAuthModalOpen(false);
+  const closeAuthModal = () => {
+    setAuthModalOpen(false);
+    setAuthModalPrefillEmail(undefined);
+  };
 
   const logoutUser = async () => {
     try {
@@ -1276,6 +1282,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         authModalOpen,
         authModalMode,
         authModalInitialStep,
+        authModalPrefillEmail,
         openAuthModal,
         openForgotPasswordModal,
         closeAuthModal,

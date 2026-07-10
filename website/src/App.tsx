@@ -18,6 +18,7 @@ import { LandingPage } from "./components/LandingPage";
 import { CinemaxLogo } from "./components/CinemaxLogo";
 import { AboutPage } from "./components/AboutPage";
 import { MoviesPage } from "./components/MoviesPage";
+import { InstallAppButton } from "./components/InstallAppButton";
 import { TVShowsPage } from "./components/TVShowsPage";
 import { ShortsPage } from "./components/ShortsPage";
 import { HomeAIAssistant } from "./components/HomeAIAssistant";
@@ -96,6 +97,7 @@ const CinemaxDashboard: React.FC = () => {
     authModalOpen,
     authModalMode,
     authModalInitialStep,
+    authModalPrefillEmail,
     openAuthModal,
     openForgotPasswordModal,
     closeAuthModal,
@@ -674,7 +676,7 @@ const CinemaxDashboard: React.FC = () => {
           {publicPageHeader}
           <HelpDeskPage />
           <Footer />
-          <AuthModal isOpen={authModalOpen} onClose={closeAuthModal} defaultMode={authModalMode} initialStep={authModalInitialStep} />
+          <AuthModal isOpen={authModalOpen} onClose={closeAuthModal} defaultMode={authModalMode} initialStep={authModalInitialStep} initialEmail={authModalPrefillEmail} />
         </div>
       );
     }
@@ -684,14 +686,14 @@ const CinemaxDashboard: React.FC = () => {
           {publicPageHeader}
           <AboutPage />
           <Footer />
-          <AuthModal isOpen={authModalOpen} onClose={closeAuthModal} defaultMode={authModalMode} initialStep={authModalInitialStep} />
+          <AuthModal isOpen={authModalOpen} onClose={closeAuthModal} defaultMode={authModalMode} initialStep={authModalInitialStep} initialEmail={authModalPrefillEmail} />
         </div>
       );
     }
     return (
       <>
         <LandingPage />
-        <AuthModal isOpen={authModalOpen} onClose={closeAuthModal} defaultMode={authModalMode} />
+        <AuthModal isOpen={authModalOpen} onClose={closeAuthModal} defaultMode={authModalMode} initialEmail={authModalPrefillEmail} />
       </>
     );
   }
@@ -834,16 +836,10 @@ const CinemaxDashboard: React.FC = () => {
 
           {/* Right Header Navigation widgets */}
           <div className="flex items-center gap-4">
-            {/* Install APK — direct download of the Cinemax Android app */}
-            <a
-              id="install-apk-btn"
-              href="/app/cinemax.apk"
-              download="cinemax.apk"
-              className="hidden md:flex items-center gap-2 bg-[#39FF14]/10 border border-[#39FF14]/20 text-[#39FF14] px-4 py-2 rounded-2xl text-xs font-bold hover:bg-[#39FF14]/20 transition-all cursor-pointer"
-            >
-              <Download className="h-4 w-4" />
-              <span>Install APK</span>
-            </a>
+            {/* Install APK — triggers the same native install flow as the
+                sidebar button. There is no static .apk binary to download;
+                both buttons drive the browser's install prompt. */}
+            <InstallAppButton variant="header" label="Install APK" />
 
             {/* Notification bell — locked for guests */}
             <div className="relative">
@@ -1322,6 +1318,7 @@ const CinemaxDashboard: React.FC = () => {
         onClose={closeAuthModal}
         defaultMode={authModalMode}
         initialStep={authModalInitialStep}
+        initialEmail={authModalPrefillEmail}
       />
 
       {/* FLOATING PICTURE IN PICTURE STREAMING CONTAINER */}

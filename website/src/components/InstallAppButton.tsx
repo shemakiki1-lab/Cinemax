@@ -11,7 +11,10 @@ interface BeforeInstallPromptEvent extends Event {
  * Edge, and most Android browsers). Safari/iOS doesn't support
  * beforeinstallprompt, so we show a short manual-install tip there instead.
  */
-export const InstallAppButton: React.FC<{ variant?: "sidebar" | "card" }> = ({ variant = "sidebar" }) => {
+export const InstallAppButton: React.FC<{ variant?: "sidebar" | "card" | "header"; label?: string }> = ({
+  variant = "sidebar",
+  label = "Install App",
+}) => {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [installed, setInstalled] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
@@ -74,11 +77,13 @@ export const InstallAppButton: React.FC<{ variant?: "sidebar" | "card" }> = ({ v
         className={
           variant === "sidebar"
             ? "flex w-full items-center gap-4 px-4 py-2.5 text-sm rounded-lg hover:text-white hover:bg-white/5 transition-colors cursor-pointer"
+            : variant === "header"
+            ? "hidden md:flex items-center gap-2 bg-[#39FF14]/10 border border-[#39FF14]/20 text-[#39FF14] px-4 py-2 rounded-2xl text-xs font-bold hover:bg-[#39FF14]/20 transition-all cursor-pointer"
             : "neon-btn flex items-center gap-2 font-extrabold px-5 py-3 rounded-xl text-xs uppercase tracking-wide transition-all cursor-pointer"
         }
       >
         <Download className="h-4 w-4 text-neutral-500" />
-        <span>Install App</span>
+        <span>{label}</span>
       </button>
       {showIOSTip && (
         <div className="absolute left-0 bottom-full mb-2 w-64 glass-card rounded-xl p-3 text-[11px] text-neutral-300 leading-relaxed shadow-xl z-50">

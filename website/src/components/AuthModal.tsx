@@ -7,6 +7,7 @@ interface AuthModalProps {
   onClose: () => void;
   defaultMode?: "signin" | "signup";
   initialStep?: "signin" | "signup" | "forgot";
+  initialEmail?: string;
 }
 
 type AuthView = "signin" | "signup" | "forgot";
@@ -22,6 +23,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   onClose,
   defaultMode = "signin",
   initialStep = "signin",
+  initialEmail,
 }) => {
   const {
     signIn,
@@ -64,7 +66,16 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     setOtp("");
     setError("");
     setInfo("");
-  }, [isOpen, defaultMode, initialStep]);
+    if (initialEmail) {
+      setEmail(initialEmail);
+      // Skip straight past the "enter your email" step — whether that lands
+      // on a password field or an emailed one-time code still depends on
+      // what the account is configured for server-side.
+      void continueWithEmail(initialEmail);
+    } else {
+      setEmail("");
+    }
+  }, [isOpen, defaultMode, initialStep, initialEmail]);
 
   useEffect(() => {
     if (signInStep === "otp") otpInputRef.current?.focus();
@@ -103,35 +114,39 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     setOtp("");
   };
 
-  const handleContinue = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const continueWithEmail = async (candidateEmail: string) => {
     setError("");
     setInfo("");
-    if (!email || !isValidEmail(email)) {
+    if (!candidateEmail || !isValidEmail(candidateEmail)) {
       setError("Please enter a valid email address.");
       return;
     }
     setSubmitting(true);
-    const methodResult = await getLoginMethod(email);
+    const methodResult = await getLoginMethod(candidateEmail);
     if (!methodResult.ok) {
       setSubmitting(false);
       setError(methodResult.error || "Something went wrong.");
       return;
     }
     if (methodResult.method === "otp") {
-      const otpResult = await requestOtp(email);
+      const otpResult = await requestOtp(candidateEmail);
       setSubmitting(false);
       if (!otpResult.ok) {
         setError(otpResult.error || "Couldn't send the code.");
         return;
       }
-      setInfo(`We sent a 6-digit code to ${email}.`);
+      setInfo(`We sent a 6-digit code to ${candidateEmail}.`);
       setResendCooldown(60);
       setSignInStep("otp");
     } else {
       setSubmitting(false);
       setSignInStep("password");
     }
+  };
+
+  const handleContinue = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await continueWithEmail(email);
   };
 
   const handlePasswordSubmit = async (e: React.FormEvent) => {

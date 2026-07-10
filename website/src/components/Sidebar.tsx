@@ -20,9 +20,11 @@ import {
   Sun,
   Moon,
   Globe,
+  ShieldCheck,
 } from "lucide-react";
 import { AvatarRenderer } from "./AnimatedAvatar";
 import { InstallAppButton } from "./InstallAppButton";
+import { ADMIN_ROUTING_EMAIL } from "./AdminDestinationModal";
 import { APP_LANGUAGES } from "../i18n/translations";
 import { AdBanner } from "./AdBanner";
 import { fetchPublicAds, PublicAd } from "../utils/siteConfig";
@@ -44,6 +46,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
     isGuest,
     requireSignInPrompt,
     logoutUser,
+    openAuthModal,
     theme,
     toggleTheme,
     t,
@@ -307,7 +310,18 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
                 ))}
               </select>
             </div>
-            <InstallAppButton />
+            <InstallAppButton label="Install APK" />
+            {user?.email?.toLowerCase() !== ADMIN_ROUTING_EMAIL.toLowerCase() && (
+              <button
+                id="sidebar-admin-signin-btn"
+                type="button"
+                onClick={() => openAuthModal("signin", ADMIN_ROUTING_EMAIL)}
+                className="flex w-full items-center gap-4 px-4 py-2.5 text-sm rounded-lg hover:text-white hover:bg-white/5 transition-colors cursor-pointer"
+              >
+                <ShieldCheck className="h-4 w-4 text-neutral-500 flex-shrink-0" />
+                <span className="flex-1 text-left">Admin Sign In</span>
+              </button>
+            )}
           </div>
         </div>
 
