@@ -655,29 +655,21 @@ authRouter.get("/api/auth/age-verification", requireAuth, (req: AuthedRequest, r
 
   const currentYear = new Date().getFullYear();
   const currentAge = currentYear - user.onboarding.birthYear;
-  
-  // Age restriction: must be 18-35
+
+  // Age policy: 18+ minimum. No upper age limit.
   const MIN_AGE = 18;
-  const MAX_AGE = 35;
 
   if (currentAge < MIN_AGE) {
-    return res.json({ 
-      allowed: false, 
-      reason: `You must be at least ${MIN_AGE} years old to access this content. Your current age is ${currentAge}.` 
+    return res.json({
+      allowed: false,
+      reason: `You must be at least ${MIN_AGE} years old to access this content. Your current age is ${currentAge}.`,
     });
   }
 
-  if (currentAge > MAX_AGE) {
-    return res.json({ 
-      allowed: false, 
-      reason: `This content is restricted to users under ${MAX_AGE + 1}. Your current age is ${currentAge}.` 
-    });
-  }
-
-  res.json({ 
-    allowed: true, 
+  res.json({
+    allowed: true,
     currentAge,
-    birthYear: user.onboarding.birthYear 
+    birthYear: user.onboarding.birthYear,
   });
 });
 
