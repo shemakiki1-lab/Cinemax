@@ -34,6 +34,19 @@ services:
         value: allkikisweb@gmail.com
       - key: EMAIL_APP_PASSWORD
         sync: false
+      # "Continue with Google" — from Google Cloud Console → APIs & Services
+      # → Credentials → OAuth client ID (Web application). GOOGLE_REDIRECT_URI
+      # must be EXACTLY this backend's URL + /api/auth/google/callback, and
+      # that same URL must be added under "Authorized redirect URIs" on the
+      # Google client, or Google will reject the sign-in with a
+      # redirect_uri_mismatch error. Until all three are set, the site
+      # correctly falls back to email sign-in and hides the Google button.
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: GOOGLE_REDIRECT_URI
+        sync: false
       # Optional extra CORS origins (comma-separated). WEBSITE_URL and
       # ADMIN_PANEL_URL below are already trusted automatically.
       - key: CORS_ORIGIN

@@ -542,14 +542,16 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         {/* Top-left "Login as Guest" shortcut on the Sign Up view — lets a
             visitor browse without creating an account. Hidden on other views
             where the back arrow occupies the same slot. */}
-        {authView === "signup" && (
+        {authView === "signup" && signupStep === "form" && (
           <button
             id="auth-guest-top-btn"
             type="button"
             onClick={() => { enterAsGuest(); onClose(); }}
-            className="absolute left-3 top-3 sm:left-4 sm:top-4 rounded-lg px-2.5 py-1.5 text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-neutral-300 hover:text-white bg-neutral-900/60 hover:bg-neutral-800 border border-neutral-800 transition-colors cursor-pointer"
+            className="absolute left-2.5 top-3 sm:left-4 sm:top-4 max-w-[38%] sm:max-w-none truncate rounded-lg px-2 sm:px-2.5 py-1.5 text-[9px] sm:text-[11px] font-bold uppercase tracking-wider text-neutral-300 hover:text-white bg-neutral-900/60 hover:bg-neutral-800 border border-neutral-800 transition-colors cursor-pointer"
+            title="Login as Guest"
           >
-            Login as Guest
+            <span className="sm:hidden">Guest</span>
+            <span className="hidden sm:inline">Login as Guest</span>
           </button>
         )}
 
@@ -770,24 +772,15 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         )}
 
         {authView === "signup" && (
-          <div className="flex items-center justify-between mt-5 border-t border-neutral-800 pt-4 text-xs">
+          <div className="text-center mt-5 border-t border-neutral-800 pt-4 text-xs">
+            <span className="text-neutral-500">Already have an account?</span>
             <button
               type="button"
-              onClick={() => { enterAsGuest(); onClose(); }}
-              className="text-neutral-400 hover:text-white font-semibold cursor-pointer transition-colors"
+              onClick={goToSignIn}
+              className="ml-1.5 text-[#39FF14] hover:underline font-bold cursor-pointer"
             >
-              Login as Guest
+              Sign In
             </button>
-            <div className="text-neutral-500">
-              <span>Already have an account?</span>
-              <button
-                type="button"
-                onClick={goToSignIn}
-                className="ml-1.5 text-[#39FF14] hover:underline font-bold cursor-pointer"
-              >
-                Sign In
-              </button>
-            </div>
           </div>
         )}
 
