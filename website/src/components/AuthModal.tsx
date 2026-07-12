@@ -11,24 +11,21 @@ import { OnboardingPreferences, UserOnboardingData } from "./OnboardingPreferenc
  * fetch) is intentional — OAuth requires the browser to leave the app.
  */
 const startGoogleOAuth = () => {
-  const base = (typeof import.meta === "object" && (import.meta as any).env?.VITE_API_BASE_URL)
-    ? String((import.meta as any).env.VITE_API_BASE_URL).replace(/\/+$/, "")
-    : "";
+  // When VITE_API_BASE_URL isn't set (typical when the backend serves the
+  // built website from the same origin, e.g. a Render web service), fall
+  // back to a relative path so the OAuth redirect still works. Only remove
+  // trailing slashes when a base is present.
+  const rawBase =
+    typeof import.meta === "object" && (import.meta as any).env?.VITE_API_BASE_URL
+      ? String((import.meta as any).env.VITE_API_BASE_URL)
+      : "";
+  const base = rawBase ? rawBase.replace(/\/+$/, "") : "";
   const returnTo = typeof window !== "undefined" ? window.location.origin : "";
   const qs = returnTo ? `?return_to=${encodeURIComponent(returnTo)}` : "";
-  
-  console.log("Starting Google OAuth...");
-  console.log("API Base URL:", base);
-  console.log("Return URL:", returnTo);
-  console.log("Full OAuth URL:", `${base}/api/auth/google${qs}`);
-  
-  if (!base) {
-    console.error("API Base URL is not configured. Google OAuth cannot work.");
-    alert("Google OAuth is not configured. Please contact support.");
-    return;
-  }
-  
-  window.location.href = `${base}/api/auth/google${qs}`;
+
+  const target = `${base}/api/auth/google${qs}`;
+  console.log("[google-oauth] redirecting to", target);
+  window.location.href = target;
 };
 
 /** Google "G" logo — inline SVG so no extra asset request is needed. */
@@ -520,8 +517,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       : "Sign In";
 
   return (
-    <div id="auth-modal-backdrop" className="fixed inset-0 z-60 flex items-center justify-center modal-backdrop p-4 animate-fade-in">
-      <div id="auth-modal" className="relative w-full max-w-md rounded-2xl border surface-panel p-6 md:p-8">
+    <div id="auth-modal-backdrop" className="fixed inset-0 z-60 flex items-center justify-center modal-backdrop p-3 sm:p-4 animate-fade-in overflow-y-auto">
+      <div id="auth-modal" className="relative w-full max-w-md rounded-2xl border surface-panel p-4 sm:p-6 md:p-8 my-4">
+
 
         <button
           id="close-auth-btn"
@@ -538,6 +536,20 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             className="absolute left-4 top-4 flex items-center gap-1 rounded-lg p-1.5 text-neutral-400 hover:text-white hover:bg-neutral-800 transition-colors cursor-pointer"
           >
             <ArrowLeft className="h-4 w-4" />
+          </button>
+        )}
+
+        {/* Top-left "Login as Guest" shortcut on the Sign Up view — lets a
+            visitor browse without creating an account. Hidden on other views
+            where the back arrow occupies the same slot. */}
+        {authView === "signup" && (
+          <button
+            id="auth-guest-top-btn"
+            type="button"
+            onClick={() => { enterAsGuest(); onClose(); }}
+            className="absolute left-3 top-3 sm:left-4 sm:top-4 rounded-lg px-2.5 py-1.5 text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-neutral-300 hover:text-white bg-neutral-900/60 hover:bg-neutral-800 border border-neutral-800 transition-colors cursor-pointer"
+          >
+            Login as Guest
           </button>
         )}
 
@@ -719,9 +731,13 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
         </form>
 
-        {/* Google OAuth — offered on Sign In (email step) and Sign Up (form step). */}
-        {((authView === "signin" && signInStep === "email") ||
-          (authView === "signup" && signupStep === "form")) && (
+        {/* Google OAuth — offered on Sign In (email step) and Sign Up (form step).
+            Only rendered when the backend reports GOOGLE_CLIENT_ID / SECRET /
+            REDIRECT_URI are all configured, so users never see a button that
+            just bounces back with a "not set up" error. */}
+        {siteConfig.googleAuthEnabled &&
+          ((authView === "signin" && signInStep === "email") ||
+            (authView === "signup" && signupStep === "form")) && (
             <>
               <AuthDivider />
               <GoogleContinueButton
