@@ -1,0 +1,119 @@
+{
+  "users": [
+    {
+      "id": "674a03ae-e835-425d-9025-03272cd37b2d",
+      "email": "allkikisweb@gmail.com",
+      "password_hash": "$2a$12$lqDhOwNiG0/uP8voVkW7P.P0Zs8HtkxqNVoWDkT1jBR.h8mGVEHjm",
+      "name": "Cinemax Admin",
+      "avatar": "cartoon:orion",
+      "banner": "",
+      "subscription": "Premium",
+      "role": "admin",
+      "status": "active",
+      "preferences": "{\"autoplayNext\":true,\"autoplayTrailers\":true,\"defaultQuality\":\"Auto\",\"subtitleLanguage\":\"Off\",\"audioLanguage\":\"English\",\"notifyNewReleases\":true,\"notifyRecommendations\":false,\"matureContentLock\":false,\"appLanguage\":\"English\"}",
+      "created_at": "2026-07-09T23:42:18.134Z",
+      "updated_at": "2026-07-09T23:42:18.134Z"
+    }
+  ],
+  "watchlist": [],
+  "my_list": [],
+  "downloads": [],
+  "favorites": [],
+  "watch_history": [],
+  "notifications": [],
+  "comments": [],
+  "ads": [],
+  "activity_logs": [],
+  "category_overrides": [],
+  "site_settings": {
+    "siteName": "Cinemax",
+    "maintenanceMode": false,
+    "heroTagline": "Welcome to Cinemax! Enjoy new trend movies and TV shows.",
+    "featuredMovieIds": [],
+    "trendingOverrideIds": [],
+    "hiddenMovieIds": [],
+    "aiModel": "llama-3.1-8b-instant",
+    "aiSystemPromptExtra": "",
+    "aiEnabled": true,
+    "homepageSections": [
+      {
+        "id": "trending",
+        "label": "Trending Now",
+        "visible": true
+      },
+      {
+        "id": "tv",
+        "label": "Popular TV Broadcast Series",
+        "visible": true
+      },
+      {
+        "id": "popular",
+        "label": "Popular Movies",
+        "visible": true
+      },
+      {
+        "id": "top_rated",
+        "label": "Top Rated Cinema Hits",
+        "visible": true
+      },
+      {
+        "id": "upcoming",
+        "label": "Upcoming Blockbusters",
+        "visible": true
+      },
+      {
+        "id": "now_playing",
+        "label": "Now Playing in Theaters",
+        "visible": true
+      }
+    ],
+    "apiKeys": {
+      "tmdb": "8e887749d8a5b7a31b807aadd903d25a",
+      "gemini": "",
+      "groq": ""
+    },
+    "contentPages": {
+      "home": {
+        "enabled": true,
+        "label": "Home"
+      },
+      "movies": {
+        "enabled": true,
+        "label": "Movies"
+      },
+      "tv": {
+        "enabled": true,
+        "label": "TV Shows"
+      },
+      "shorts": {
+        "enabled": true,
+        "label": "Shorts"
+      },
+      "mylist": {
+        "enabled": true,
+        "label": "My List"
+      },
+      "watchlist": {
+        "enabled": true,
+        "label": "Watchlist"
+      },
+      "history": {
+        "enabled": true,
+        "label": "History"
+      },
+      "favorites": {
+        "enabled": true,
+        "label": "Favorites"
+      },
+      "downloads": {
+        "enabled": true,
+        "label": "Downloads"
+      }
+    }
+  },
+  "chat_messages": [],
+  "direct_messages": [],
+  "custom_content": [],
+  "custom_content_seq": 0,
+  "support_inquiries": []
+}
