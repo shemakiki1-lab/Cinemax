@@ -19,11 +19,45 @@ export interface StreamingProvider {
  */
 export const PROVIDERS_CONFIG: StreamingProvider[] = [
   {
-    // Vidsrc.xyz — currently the most reliable free TMDB-ID embed source with
-    // full-movie playback and 1080p fallbacks. Query params tune autoplay,
-    // subtitle language, and the UI accent color for a cleaner in-frame UX.
-    id: "vidsrc-xyz",
+    // Vidsrc.pm — high-availability professional player for full movies.
+    id: "vidsrc-pm",
     name: "P1",
+    homepage: "https://vidsrc.pm",
+    moviePattern: "https://vidsrc.pm/embed/movie?tmdb={id}&ds_lang=en&autoplay=1",
+    tvPattern: "https://vidsrc.pm/embed/tv?tmdb={id}&season={season}&episode={episode}&ds_lang=en&autoplay=1",
+    qualityOptions: ["1080p", "720p", "Auto"],
+    audioOptions: ["Original", "English"],
+    subtitlesOptions: ["Embedded", "English"],
+    defaultLatency: 95,
+    status: "Online",
+  },
+  {
+    id: "vidsrc-pw",
+    name: "P2",
+    homepage: "https://vidsrc.pw",
+    moviePattern: "https://vidsrc.pw/embed/movie?tmdb={id}&ds_lang=en&autoplay=1",
+    tvPattern: "https://vidsrc.pw/embed/tv?tmdb={id}&season={season}&episode={episode}&ds_lang=en&autoplay=1",
+    qualityOptions: ["1080p", "720p", "Auto"],
+    audioOptions: ["Original", "English"],
+    subtitlesOptions: ["Embedded", "English"],
+    defaultLatency: 90,
+    status: "Online",
+  },
+  {
+    id: "vidsrc-to",
+    name: "P3",
+    homepage: "https://vidsrc.to",
+    moviePattern: "https://vidsrc.to/embed/movie?tmdb={id}&ds_lang=en&autoplay=1",
+    tvPattern: "https://vidsrc.to/embed/tv?tmdb={id}&season={season}&episode={episode}&ds_lang=en&autoplay=1",
+    qualityOptions: ["1080p", "720p", "Auto"],
+    audioOptions: ["Original", "English"],
+    subtitlesOptions: ["Embedded", "English"],
+    defaultLatency: 90,
+    status: "Online",
+  },
+  {
+    id: "vidsrc-xyz",
+    name: "P4",
     homepage: "https://vidsrc.xyz",
     moviePattern: "https://vidsrc.xyz/embed/movie?tmdb={id}&ds_lang=en&autoplay=1",
     tvPattern: "https://vidsrc.xyz/embed/tv?tmdb={id}&season={season}&episode={episode}&ds_lang=en&autoplay=1",
@@ -36,7 +70,7 @@ export const PROVIDERS_CONFIG: StreamingProvider[] = [
   {
     // Embed.su — strong ad-blocking, direct-MP4 fallback for many titles.
     id: "embed-su",
-    name: "P2",
+    name: "P5",
     homepage: "https://embed.su",
     moviePattern: "https://embed.su/embed/movie/{id}",
     tvPattern: "https://embed.su/embed/tv/{id}/{season}/{episode}",
@@ -50,7 +84,46 @@ export const PROVIDERS_CONFIG: StreamingProvider[] = [
     // Vidlink.pro — clean player, brand-color theming, autoplay, next-episode
     // support out of the box. Great fallback when P1/P2 rate-limit.
     id: "vidlink-pro",
-    name: "P3",
+    name: "P6",
+    homepage: "https://vidlink.pro",
+    moviePattern: "https://vidlink.pro/movie/{id}?primaryColor=39FF14&secondaryColor=39FF14&iconColor=39FF14&autoplay=true&title=true",
+    tvPattern: "https://vidlink.pro/tv/{id}/{season}/{episode}?primaryColor=39FF14&secondaryColor=39FF14&iconColor=39FF14&autoplay=true&nextbutton=true&title=true",
+    qualityOptions: ["1080p", "720p", "Auto"],
+    audioOptions: ["Original", "English"],
+    subtitlesOptions: ["Embedded", "English"],
+    defaultLatency: 115,
+    status: "Online",
+  },
+];
+  {
+    id: "vidsrc-pm",
+    name: "P4",
+    homepage: "https://vidsrc.pm",
+    moviePattern: "https://vidsrc.pm/embed/movie?tmdb={id}&ds_lang=en&autoplay=1",
+    tvPattern: "https://vidsrc.pm/embed/tv?tmdb={id}&season={season}&episode={episode}&ds_lang=en&autoplay=1",
+    qualityOptions: ["1080p", "720p", "Auto"],
+    audioOptions: ["Original", "English"],
+    subtitlesOptions: ["Embedded", "English"],
+    defaultLatency: 95,
+    status: "Online",
+  },
+  {
+    id: "vidfast-pro",
+    name: "P5",
+    homepage: "https://vidfast.pro",
+    moviePattern: "https://vidfast.pro/embed/movie?tmdb={id}&ds_lang=en&autoplay=1",
+    tvPattern: "https://vidfast.pro/embed/tv?tmdb={id}&season={season}&episode={episode}&ds_lang=en&autoplay=1",
+    qualityOptions: ["1080p", "720p", "Auto"],
+    audioOptions: ["Original", "English"],
+    subtitlesOptions: ["Embedded", "English"],
+    defaultLatency: 110,
+    status: "Online",
+  },
+  {
+    // Vidlink.pro — clean player, brand-color theming, autoplay, next-episode
+    // support out of the box. Great fallback when P1/P2 rate-limit.
+    id: "vidlink-pro",
+    name: "P6",
     homepage: "https://vidlink.pro",
     moviePattern: "https://vidlink.pro/movie/{id}?primaryColor=39FF14&secondaryColor=39FF14&iconColor=39FF14&autoplay=true&title=true",
     tvPattern: "https://vidlink.pro/tv/{id}/{season}/{episode}?primaryColor=39FF14&secondaryColor=39FF14&iconColor=39FF14&autoplay=true&nextbutton=true&title=true",

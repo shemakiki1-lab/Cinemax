@@ -1087,7 +1087,7 @@ authRouter.post("/api/stream/resolve", async (req, res) => {
   if (!url || typeof url !== "string") return res.status(400).json({ error: "url is required" });
   try {
     const u = new URL(url);
-    const allowedEmbedHosts = ["vidsrc.xyz", "embed.su", "vidlink.pro", "vidsrc.to", "vidsrc.pm", "vidfast.pro", "vidsrc.me"];
+    const allowedEmbedHosts = ["vidsrc.xyz", "embed.su", "vidlink.pro", "vidsrc.to", "vidsrc.pm", "vidsrc.me", "vidsrc.pw", "vidfast.pro"];
     if (!allowedEmbedHosts.some((h) => u.hostname.endsWith(h))) {
       return res.status(403).json({ error: "Host not permitted for resolving." });
     }
@@ -1136,7 +1136,7 @@ authRouter.get("/api/proxy", async (req, res) => {
     const parsed = new URL(url);
     // Allowlist of provider hostnames — restrict proxying to known streaming
     // providers to avoid becoming an open proxy. Extend as needed.
-    const allowedHosts = ["vidsrc.xyz", "embed.su", "vidlink.pro", "vidsrc.to", "vidsrc.pm", "vidfast.pro", "vidsrc.me", "cdn.jsdelivr.net", "storage.googleapis.com", "googlevideo.com", "cloudfront.net", "workers.dev", "m3u8.dev"];
+    const allowedHosts = ["vidsrc.xyz", "embed.su", "vidlink.pro", "vidsrc.to", "vidsrc.pm", "vidsrc.me", "vidsrc.pw", "vidfast.pro", "cdn.jsdelivr.net", "storage.googleapis.com", "googlevideo.com", "cloudfront.net", "workers.dev", "m3u8.dev"];
     if (!allowedHosts.some((h) => parsed.hostname.endsWith(h))) {
       return res.status(403).json({ error: "Host not permitted for proxying." });
     }

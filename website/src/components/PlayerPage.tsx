@@ -532,33 +532,39 @@ export const PlayerPage: React.FC = () => {
     setStreamType('embed');
     if (!selectedMovie || selectedMovie.isCustom) return;
 
+    const providersToTry = [activeServer, ...PROVIDERS_CONFIG.filter((p) => p.id !== activeServer.id)];
+
+    const tryResolveProvider = async (provider: typeof activeServer) => {
+      const embed = buildEmbedUrl(provider, isTv ? 'tv' : 'movie', selectedMovie.id, currentSeason, currentEpisode);
+      const res = await fetch(`${API_BASE}/api/stream/resolve`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: embed }),
+      });
+      if (!res.ok) return null;
+      const j = await res.json();
+      const source = j?.sourceUrl as string | undefined | null;
+      if (!source) return null;
+      const proxied = API_BASE ? `${API_BASE}/api/proxy?url=${encodeURIComponent(source)}` : source;
+      if (source.endsWith('.m3u8')) {
+        return { type: 'hls' as const, source: proxied };
+      }
+      return { type: 'mp4' as const, source: proxied };
+    };
+
     const tryResolve = async () => {
-      try {
-        const embed = buildEmbedUrl(activeServer, isTv ? 'tv' : 'movie', selectedMovie.id, currentSeason, currentEpisode);
-        const res = await fetch(`${API_BASE}/api/stream/resolve`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ url: embed }),
-        });
-        if (!res.ok) return;
-        const j = await res.json();
-        if (!mounted) return;
-        const source = j?.sourceUrl as string | undefined | null;
-        if (!source) return;
-        const proxied = API_BASE ? `${API_BASE}/api/proxy?url=${encodeURIComponent(source)}` : source;
-        if (source.endsWith('.m3u8')) {
-          setStreamType('hls');
-          setStreamSource(proxied);
-        } else if (/\.mp4(\?|$)/i.test(source)) {
-          setStreamType('mp4');
-          setStreamSource(proxied);
-        } else {
-          // unknown — still try mp4 playback as fallback
-          setStreamType('mp4');
-          setStreamSource(proxied);
+      for (const provider of providersToTry) {
+        if (!mounted) break;
+        try {
+          const result = await tryResolveProvider(provider);
+          if (result && mounted) {
+            setStreamType(result.type);
+            setStreamSource(result.source);
+            break;
+          }
+        } catch (err) {
+          console.warn('Provider resolve failed', provider.id, err);
         }
-      } catch (err) {
-        console.error('Stream resolve failed', err);
       }
     };
 
